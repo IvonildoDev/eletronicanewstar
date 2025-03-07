@@ -75,10 +75,22 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         },
 
+        getGreeting() {
+            const hour = new Date().getHours();
+            if (hour >= 5 && hour < 12) {
+                return "Bom dia";
+            } else if (hour >= 12 && hour < 18) {
+                return "Boa tarde";
+            } else {
+                return "Boa noite";
+            }
+        },
+
         toggleChat() {
             this.container.classList.toggle('active');
             if (!this.messages.hasChildNodes()) {
-                this.addMessage("Olá! Eu sou Electra, sua atendente virtual. Como posso ajudar?", 'bot');
+                const greeting = this.getGreeting();
+                this.addMessage(`${greeting}! Eu sou Electra, sua atendente virtual. Como posso ajudar?`, 'bot');
             }
         },
 
@@ -104,15 +116,43 @@ document.addEventListener('DOMContentLoaded', function () {
             userMessage = userMessage.toLowerCase();
 
             if (userMessage.includes('olá') || userMessage.includes('oi')) {
-                response = "Olá! Como posso ajudar você hoje?";
+                const greeting = this.getGreeting();
+                response = `${greeting}! Como posso ajudar você hoje?`;
             } else if (userMessage.includes('horário')) {
-                response = "Nosso horário de funcionamento é de segunda a sexta, das 8h às 18h, e sábados das 8h às 12h.";
+                const hoje = new Date().getDay();
+                if (hoje === 0) { // Domingo
+                    response = "Hoje estamos fechados. Nosso horário de funcionamento é de segunda a sexta, das 8h às 18h, e sábados das 8h às 12h.";
+                } else if (hoje === 6) { // Sábado
+                    response = "Hoje funcionamos das 8h às 12h.";
+                } else {
+                    response = "Hoje funcionamos das 8h às 18h.";
+                }
             } else if (userMessage.includes('endereço') || userMessage.includes('localização')) {
                 response = "Estamos localizados na Rua 7 de maio 559, Pilar - AL.";
             } else if (userMessage.includes('serviço') || userMessage.includes('conserto')) {
                 response = "Oferecemos serviços de conserto de TVs, micro-ondas e vendemos controles. Como posso te ajudar?";
             } else if (userMessage.includes('contato') || userMessage.includes('telefone')) {
                 response = "Você pode entrar em contato conosco pelo telefone (82) 9908-0401.";
+            } else if (userMessage.includes('aberto') || userMessage.includes('funcionando')) {
+                const hoje = new Date();
+                const hora = hoje.getHours();
+                const dia = hoje.getDay();
+
+                if (dia === 0) {
+                    response = "Estamos fechados hoje (domingo). Voltamos a funcionar amanhã das 8h às 18h.";
+                } else if (dia === 6) { // Sábado
+                    if (hora >= 8 && hora < 12) {
+                        response = "Sim, estamos abertos! Hoje funcionamos até 12h.";
+                    } else {
+                        response = "Estamos fechados agora. Aos sábados funcionamos das 8h às 12h.";
+                    }
+                } else { // Segunda a Sexta
+                    if (hora >= 8 && hora < 18) {
+                        response = "Sim, estamos abertos! Hoje funcionamos até 18h.";
+                    } else {
+                        response = "Estamos fechados agora. Funcionamos de segunda a sexta das 8h às 18h.";
+                    }
+                }
             }
 
             this.addMessage(response, 'bot');

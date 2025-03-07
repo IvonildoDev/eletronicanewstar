@@ -306,6 +306,38 @@ button:hover {
     display: block;
 }
 
+.chat-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border-radius: 10px 10px 0 0;
+}
+
+.chat-title {
+    flex: 1;
+}
+
+.chat-title h3 {
+    font-size: 1rem;
+    margin: 0;
+}
+
+.chat-title p {
+    font-size: 0.8rem;
+    margin: 0;
+    opacity: 0.8;
+}
+
 /* Footer */
 footer {
     background: #333;
