@@ -24,6 +24,39 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // Menu active state and scroll behavior
+    const sections = document.querySelectorAll('section[id]');
+
+    function scrollActive() {
+        const scrollY = window.pageYOffset;
+
+        sections.forEach(current => {
+            const sectionHeight = current.offsetHeight;
+            const sectionTop = current.offsetTop - 100;
+            const sectionId = current.getAttribute('id');
+
+            if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                document.querySelector('.nav__link[href*=' + sectionId + ']').classList.add('active');
+            } else {
+                document.querySelector('.nav__link[href*=' + sectionId + ']').classList.remove('active');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', scrollActive);
+
+    // Header scroll behavior
+    function scrollHeader() {
+        const header = document.getElementById('header');
+        if (this.scrollY >= 50) {
+            header.classList.add('scroll-header');
+        } else {
+            header.classList.remove('scroll-header');
+        }
+    }
+
+    window.addEventListener('scroll', scrollHeader);
+
     // Carousel functionality
     const carousel = {
         container: document.querySelector('.carousel__container'),
